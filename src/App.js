@@ -1,24 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { Navbar } from "./components/Navbar";
+import { Showcase } from "./components/Showcase";
+import { MarvelThemeContext } from "./MarvelThemeContext";
+import { AppContext } from "./Context";
 
 function App() {
+  const [cartItems, setCartItems] = useState([]);
+
+  const handleAddtoCart = (item) => {
+    const alreadyinCart = cartItems.find((el) => el.id === item.id);
+
+    if (alreadyinCart) return;
+    setCartItems((prevCarts) => [item, ...prevCarts]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <MarvelThemeContext>
+      <AppContext.Provider
+        value={{
+          cartItems,
+          handleAddtoCart,
+        }}
+      >
+        <div
+          className="App"
+          style={{
+            display: "grid",
+            gridTemplateRows: "64px 1fr",
+            width: "100vw",
+            height: "100vh",
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Navbar />
+          <Showcase />
+        </div>
+      </AppContext.Provider>
+    </MarvelThemeContext>
   );
 }
 
